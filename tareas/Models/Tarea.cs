@@ -1,4 +1,4 @@
-﻿namespace _26agosto.Models
+﻿namespace crudsweb3.Models
 {
     public class Tarea
     {

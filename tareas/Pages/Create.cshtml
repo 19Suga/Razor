@@ -1,0 +1,223 @@
+﻿@page
+@model crudsweb3.Pages.CreateModel
+
+@{
+    ViewData["Title"] = "Crear tarea";
+}
+
+<div class="container py-4">
+    <div class="d-flex align-items-center mb-4">
+        <a asp-page="./Index" class="btn btn-back me-3">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div>
+            <h1 class="h3 m-0 title-text">Crear Nueva Tarea</h1>
+            <p class="text-muted mb-0">Completa los detalles para agregar una nueva tarea</p>
+        </div>
+    </div>
+
+    <div class="card custom-form-card">
+        <div class="card-body p-4">
+            <form method="post" class="needs-validation" novalidate>
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-custom-danger" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>Por favor, corrige los errores a continuación.
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Tarea.nombreTarea" class="form-label form-label-custom"></label>
+                    <div class="input-group-custom">
+                        <span class="input-group-icon">
+                            <i class="fas fa-tasks"></i>
+                        </span>
+                        <input asp-for="Tarea.nombreTarea" class="form-control form-control-custom" placeholder="Ej: Comprar insumos para oficina" />
+                    </div>
+                    <span asp-validation-for="Tarea.nombreTarea" class="text-danger validation-message"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Tarea.fechaVencimiento" class="form-label form-label-custom"></label>
+                    <div class="input-group-custom">
+                        <span class="input-group-icon">
+                            <i class="fas fa-calendar-day"></i>
+                        </span>
+                        <input asp-for="Tarea.fechaVencimiento" type="datetime-local" class="form-control form-control-custom" />
+                    </div>
+                    <span asp-validation-for="Tarea.fechaVencimiento" class="text-danger validation-message"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Tarea.estado" class="form-label form-label-custom"></label>
+                    <div class="input-group-custom">
+                        <span class="input-group-icon">
+                            <i class="fas fa-status"></i>
+                        </span>
+                        <select asp-for="Tarea.estado" class="form-control form-control-custom">
+                            <option value="">Selecciona un estado</option>
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="En curso">En curso</option>
+                            <option value="Completado">Completado</option>
+                            <option value="Inactivo">Inactivo</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="Tarea.estado" class="text-danger validation-message"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Tarea.IdUsuario" class="form-label form-label-custom"></label>
+                    <div class="input-group-custom">
+                        <span class="input-group-icon">
+                            <i class="fas fa-user"></i>
+                        </span>
+                        <input asp-for="Tarea.IdUsuario" type="number" min="1" step="1" class="form-control form-control-custom" placeholder="ID del usuario asignado" />
+                    </div>
+                    <span asp-validation-for="Tarea.IdUsuario" class="text-danger validation-message"></span>
+                </div>
+
+                <div class="d-flex gap-3 mt-5">
+                    <button type="submit" class="btn btn-primary btn-custom">
+                        <i class="fas fa-plus-circle me-2"></i>Crear Tarea
+                    </button>
+                    <a asp-page="./Index" class="btn btn-outline-secondary btn-custom-outline">
+                        <i class="fas fa-list me-2"></i>Volver a la lista
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .title-text {
+        color: #4a4a8c;
+        font-weight: 700;
+    }
+
+    .btn-back {
+        background-color: #f8f9ff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        color: #4a5568;
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+    }
+
+        .btn-back:hover {
+            background-color: #edf2f7;
+            transform: translateX(-2px);
+        }
+
+    .custom-form-card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        background-color: #ffffff;
+        overflow: hidden;
+    }
+
+    .form-label-custom {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+    }
+
+    .input-group-custom {
+        position: relative;
+    }
+
+    .input-group-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #a0aec0;
+        z-index: 5;
+    }
+
+    .form-control-custom {
+        padding-left: 45px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        height: 50px;
+        transition: all 0.3s;
+        background-color: #fafbff;
+    }
+
+        .form-control-custom:focus {
+            border-color: #6a11cb;
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.15);
+            background-color: #ffffff;
+        }
+
+    .btn-custom {
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s;
+        border: none;
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(106, 17, 203, 0.2);
+        }
+
+    .btn-custom-outline {
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s;
+        border: 1px solid #e2e8f0;
+        color: #4a5568;
+    }
+
+        .btn-custom-outline:hover {
+            background-color: #f8f9ff;
+            border-color: #cbd5e0;
+            color: #4a5568;
+            transform: translateY(-2px);
+        }
+
+    /* Alertas */
+    .alert-custom-danger {
+        background-color: rgba(220, 53, 69, 0.1);
+        border: 1px solid rgba(220, 53, 69, 0.2);
+        border-radius: 10px;
+        color: #dc3545;
+        padding: 12px 16px;
+    }
+
+    .validation-message {
+        font-size: 0.85rem;
+        margin-top: 6px;
+        display: block;
+    }
+
+    /* Estilos para el select personalizado */
+    select.form-control-custom {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%234a5568' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 15px center;
+        background-size: 16px;
+        padding-right: 45px;
+    }
+</style>
+
+<!-- iconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,7 +1,14 @@
+using _26agosto.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+// Registrar el DbContext - AÑADE ESTAS LÍNEAS
+builder.Services.AddDbContext<TareaDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 

@@ -1,10 +1,12 @@
-using _26agosto.Data;
-using _26agosto.Models;
-using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using crudsweb3.Models;
+using crudsweb3.data;
 
-namespace _26agosto.Pages
+namespace crudsweb3.Pages
 {
     public class IndexModel : PageModel
     {

@@ -1,0 +1,293 @@
+﻿@page
+@model crudsweb3.Pages.IndexModel
+
+@{
+    ViewData["Title"] = "Tareas";
+}
+
+<div class="container py-4">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h1 class="h3 m-0 title-text">Gestión de Tareas</h1>
+            <p class="text-muted mb-0">Administra y organiza todas tus actividades</p>
+        </div>
+        <a asp-page="Create" class="btn btn-primary btn-custom">
+            <i class="fas fa-plus me-2"></i>Crear nueva
+        </a>
+    </div>
+
+    <div class="card custom-card">
+        <div class="card-body p-0">
+            @if (Model.Tarea == null || !Model.Tarea.Any())
+            {
+                <div class="p-5 text-center">
+                    <div class="empty-icon mb-3">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="fs-5 mb-2">No hay tareas registradas.</div>
+                    <p class="text-muted mb-3">Comienza creando tu primera tarea para organizar tu trabajo</p>
+                    <a asp-page="Create" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-plus me-1"></i>Crear la primera tarea
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div class="table-container">
+                    <table class="table custom-table">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">@Html.DisplayNameFor(m => m.Header.nombreTarea)</th>
+                                <th>@Html.DisplayNameFor(m => m.Header.fechaVencimiento)</th>
+                                <th>@Html.DisplayNameFor(m => m.Header.estado)</th>
+                                <th>@Html.DisplayNameFor(m => m.Header.IdUsuario)</th>
+                                <th class="text-end pe-4" style="width: 200px;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Tarea)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-medium task-name">
+                                        @Html.DisplayFor(_ => item.nombreTarea)
+                                    </td>
+                                    <td>
+                                        @{
+                                            string mostrado;
+                                            if (item.fechaVencimiento == null)
+                                            {
+                                                mostrado = "-";
+                                            }
+                                            else
+                                            {
+                                                mostrado = string.Format("{0:dd/MM/yyyy}", item.fechaVencimiento);
+                                            }
+                                        }
+                                        <span class="date-display">@mostrado</span>
+                                    </td>
+                                    <td>
+                                        @{
+                                            var est = (item.estado ?? string.Empty).ToString();
+                                            var e = est.Trim().ToLowerInvariant();
+                                            var badge = "badge-secondary";
+                                            var icon = "fa-circle";
+                                            if (bool.TryParse(e, out var bBool))
+                                            {
+                                                badge = bBool ? "badge-success" : "badge-danger";
+                                                est = bBool ? "Activo" : "Inactivo";
+                                                icon = bBool ? "fa-check-circle" : "fa-times-circle";
+                                            }
+                                            else if (e == "activo" || e == "activa" || e == "completado" || e == "completada")
+                                            {
+                                                badge = "badge-success";
+                                                icon = "fa-check-circle";
+                                            }
+                                            else if (e == "pendiente")
+                                            {
+                                                badge = "badge-warning";
+                                                icon = "fa-clock";
+                                            }
+                                            else if (e == "inactivo" || e == "cancelado" || e == "vencido")
+                                            {
+                                                badge = "badge-danger";
+                                                icon = "fa-exclamation-circle";
+                                            }
+                                        }
+                                        <span class="badge @badge status-badge">
+                                            <i class="fas @icon me-1"></i> @est
+                                        </span>
+                                    </td>
+                                    <td class="user-cell">@Html.DisplayFor(_ => item.IdUsuario)</td>
+                                    <td class="text-end pe-4">
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-action btn-details">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-action btn-edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-action btn-delete">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Estilos generales */
+    .title-text {
+        color: #4a4a8c;
+        font-weight: 700;
+    }
+
+    .btn-custom {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+        box-shadow: 0 4px 6px rgba(106, 17, 203, 0.2);
+        transition: all 0.3s;
+    }
+
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(106, 17, 203, 0.3);
+        }
+
+    /* Tarjeta contenedora */
+    .custom-card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    /* Estado vacío */
+    .empty-icon {
+        font-size: 3.5rem;
+        color: #dde1e6;
+    }
+
+    /* Tabla personalizada */
+    .table-container {
+        overflow: hidden;
+        border-radius: 12px;
+    }
+
+    .custom-table {
+        margin-bottom: 0;
+    }
+
+        .custom-table thead tr {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+        }
+
+        .custom-table th {
+            border: none;
+            padding: 16px 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .custom-table tbody tr {
+            border-bottom: 1px solid #f1f3f6;
+            transition: all 0.2s;
+        }
+
+            .custom-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+            .custom-table tbody tr:hover {
+                background-color: #f8f9ff;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
+            }
+
+        .custom-table td {
+            padding: 16px 12px;
+            vertical-align: middle;
+            border: none;
+        }
+
+    /* Celdas específicas */
+    .task-name {
+        color: #3a3a72;
+        font-weight: 600;
+    }
+
+    .date-display {
+        background-color: #f3f6ff;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        color: #4a4a8c;
+    }
+
+    .user-cell {
+        color: #6c757d;
+        font-weight: 500;
+    }
+
+    /* Badges de estado */
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .badge-success {
+        background-color: rgba(40, 167, 69, 0.15) !important;
+        color: #28a745;
+    }
+
+    .badge-warning {
+        background-color: rgba(255, 193, 7, 0.15) !important;
+        color: #ffc107;
+    }
+
+    .badge-danger {
+        background-color: rgba(220, 53, 69, 0.15) !important;
+        color: #dc3545;
+    }
+
+    .badge-secondary {
+        background-color: rgba(108, 117, 125, 0.15) !important;
+        color: #6c757d;
+    }
+
+    /* Botones de acción */
+    .btn-action {
+        border: none;
+        border-radius: 6px;
+        padding: 6px 10px;
+        margin: 0 2px;
+        transition: all 0.2s;
+    }
+
+    .btn-details {
+        background-color: rgba(32, 201, 151, 0.15);
+        color: #20c997;
+    }
+
+        .btn-details:hover {
+            background-color: #20c997;
+            color: white;
+        }
+
+    .btn-edit {
+        background-color: rgba(13, 110, 253, 0.15);
+        color: #0d6efd;
+    }
+
+        .btn-edit:hover {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+    .btn-delete {
+        background-color: rgba(220, 53, 69, 0.15);
+        color: #dc3545;
+    }
+
+        .btn-delete:hover {
+            background-color: #dc3545;
+            color: white;
+        }
+</style>
+
+<!-- Incluir Font Awesome para los iconos -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
